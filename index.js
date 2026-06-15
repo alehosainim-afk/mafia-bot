@@ -6,7 +6,7 @@ let db;
  
 async function connectDB() {
   await mongoClient.connect();
-  db = mongoClient.db('chroto-credits');
+  db = mongoClient.db('chroto-balance');
   console.log('Connected to MongoDB');
 }
  
@@ -102,7 +102,7 @@ client.on('messageCreate', async (message) => {
     const balance = await getBalance(target.id);
     const embed = new EmbedBuilder()
       .setTitle(`💰 Balance`)
-      .setDescription(`**${target.username}** has **${balance}** credits`)
+      .setDescription(`**${target.username}** has **${balance}** $ worth in balance`)
       .setColor(0x2b2d31);
     await message.reply({ embeds: [embed] });
   }
@@ -115,7 +115,7 @@ client.on('messageCreate', async (message) => {
     const newBalance = await addBalance(target.id, amount);
     const embed = new EmbedBuilder()
       .setTitle('✅ Balance Added')
-      .setDescription(`Added **${amount}** credits to **${target.username}**\nNew balance: **${newBalance}** credits`)
+      .setDescription(`Added **${amount}** balance to **${target.username}**\nNew balance: **${newBalance}** $`)
       .setColor(0x00aa00);
     await message.reply({ embeds: [embed] });
   }
@@ -138,7 +138,7 @@ client.on('interactionCreate', async (interaction) => {
       const balance = await getBalance(target.id);
       const embed = new EmbedBuilder()
         .setTitle('💰 Balance')
-        .setDescription(`**${target.username}** has **${balance}** credits`)
+        .setDescription(`**${target.username}** has **${balance}** $`)
         .setColor(0x2b2d31);
       await interaction.reply({ embeds: [embed] });
     }
@@ -150,7 +150,7 @@ client.on('interactionCreate', async (interaction) => {
       const newBalance = await addBalance(target.id, amount);
       const embed = new EmbedBuilder()
         .setTitle('✅ Balance Added')
-        .setDescription(`Added **${amount}** credits to **${target.username}**\nNew balance: **${newBalance}** credits`)
+        .setDescription(`Added **${amount}** $ to **${target.username}**\nNew balance: **${newBalance}** $`)
         .setColor(0x00aa00);
       await interaction.reply({ embeds: [embed] });
     }
