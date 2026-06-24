@@ -97,7 +97,7 @@ client.on('messageCreate', async (message) => {
   const args = message.content.slice(prefix.length).trim().split(/ +/);
   const command = args.shift().toLowerCase();
  
-  if (command === 'balance') {
+  if (command === 'balance' || command === 'bal') {
     const target = message.mentions.users.first() || message.author;
     const balance = await getBalance(target.id);
     const embed = new EmbedBuilder()
@@ -128,6 +128,23 @@ client.on('messageCreate', async (message) => {
     await message.reply(`Prefix set to \`${newPrefix}\``);
   }
 });
+
+  if (command === 'transfer') {
+    const target = message.mentions.users.first();
+    const amount = parseFloat(args[1]);
+    if (!target) return message.reply('Usage: `+transfer @user <amount>`');
+    if (isNaN(amount) || amount <= 0) return message.reply('Please provide a valid amount!');
+    if (target.id === message.author.id) return message.reply("You can't transfer balance to yourself!");
+    const senderBalance = await getBalance(message.author.id);
+    if (senderBalance < amount) return message.reply(`Insufficient balance! You have **${senderBalance}** $`);
+    await addBalance(message.author.id, -amount);
+    const newReceiverBalance = await addBalance(target.id, amount);
+    const embed = new EmbedBuilder()
+      .setTitle('💸 Transfer Complete')
+      .setDescription(`**${message.author.username}** transferred **${amount}** $ to **${target.username}**\n${target.username}'s new balance: **${newReceiverBalance}** $`)
+      .setColor(0x00aa00);
+    await message.reply({ embeds: [embed] });
+  }
  
 client.on('interactionCreate', async (interaction) => {
   try {
