@@ -127,7 +127,6 @@ client.on('messageCreate', async (message) => {
     await savePrefix(guildId, newPrefix);
     await message.reply(`Prefix set to \`${newPrefix}\``);
   }
-});
 
   if (command === 'transfer') {
     const target = message.mentions.users.first();
@@ -145,6 +144,7 @@ client.on('messageCreate', async (message) => {
       .setColor(0x00aa00);
     await message.reply({ embeds: [embed] });
   }
+});
  
 client.on('interactionCreate', async (interaction) => {
   try {
